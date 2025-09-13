@@ -11,10 +11,16 @@ import streamlit as st
 # -----set-up inicial-----
 
 sys.path.append('..')
+st.set_page_config(
+    page_title="Perfil - TC-chat",
+    page_icon=emoji.emojize(":bust_in_silhouette:")
+)
 
-# esconde sidebar criada automaticamente
+# esconde sidebar e toolbar geradas automaticamente
 st.markdown(
     '<style>[data-testid="stSidebarNav"] { display: none; }</style>', unsafe_allow_html=True)
+st.markdown(
+    '<style>[data-testid="stToolbar"] { display: none; }</style>', unsafe_allow_html=True)
 
 st.set_page_config(
     layout="centered",
@@ -30,7 +36,7 @@ if not st.session_state.get("is_authenticated", False):
 
 # -----conteúdo principal da página-----
 
-st.title(emoji.emojize("Meu Perfil :bust_in_shilhouette:"))
+st.title(emoji.emojize("Meu Perfil :bust_in_silhouette:"))
 st.divider()
 st.subheader("Informações do Usuário")
 

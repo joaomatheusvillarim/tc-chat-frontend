@@ -10,10 +10,16 @@ import streamlit as st
 # -----set-up inicial-----
 
 sys.path.append('..')
+st.set_page_config(
+    page_title="Chats - TC-chat",
+    page_icon=emoji.emojize(":speech_balloon:")
+)
 
-# esconde sidebar gerada automaticamente
+# esconde sidebar e toolbar geradas automaticamente
 st.markdown(
     '<style>[data-testid="stSidebarNav"] { display: none; }</style>', unsafe_allow_html=True)
+st.markdown(
+    '<style>[data-testid="stToolbar"] { display: none; }</style>', unsafe_allow_html=True)
 
 st.session_state.chat_history = None
 
@@ -128,7 +134,7 @@ with st.sidebar:
 
 # -----conteúdo principal da página-----
 
-st.title(emoji.emojize("TC chat :books::robot:"))
+st.title(emoji.emojize("TC-chat :books::robot:"))
 
 # exibe as mensagens do chat atual
 for message in st.session_state.get('active_chat_messages', []):

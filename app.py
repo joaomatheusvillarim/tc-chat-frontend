@@ -10,10 +10,16 @@ import api.login_requests as login_requests
 
 # -----set-up inicial-----
 
-# esconde sidebar gerada automaticamente
+st.set_page_config(
+    page_title="Login - TC-chat",
+    page_icon=emoji.emojize(":books:")
+)
+
+# esconde sidebar e toolbar geradas automaticamente
 st.markdown(
     '<style>[data-testid="stSidebar"] { display: none; }</style>', unsafe_allow_html=True)
-
+st.markdown(
+    '<style>[data-testid="stToolbar"] { display: none; }</style>', unsafe_allow_html=True)
 # -----funções utilizadas neste módulo-----
 
 
@@ -44,7 +50,6 @@ def handle_login(email: str, password: str):
                      icon=emoji.emojize(":warning:"))
 
 # -----conteúdo principal da página-----
-
 
 initialize_session_state()
 

@@ -8,9 +8,17 @@ import api.user_requests as user_requests
 
 # -----set-up inicial-----
 
-# esconde sidebar criada automaticamente
+st.set_page_config(
+    page_title="Registro - TC-chat",
+    page_icon=emoji.emojize(":pencil:")
+)
+
+# esconde sidebar e toolbar geradas automaticamente
 st.markdown(
     '<style>[data-testid="stSidebar"] { display: none; }</style>', unsafe_allow_html=True)
+st.markdown(
+    '<style>[data-testid="stToolbar"] { display: none; }</style>', unsafe_allow_html=True
+)
 
 # -----funções utilizadas neste módulo-----
 
