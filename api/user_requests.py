@@ -15,7 +15,7 @@ def base_user_request(method: str,
                       user_id: str = "",
                       data: dict = None):
     import os
-    backend_url = os.getenv("BACKEND_URL") or "http://localhost:3000"
+    backend_url = os.getenv("BACKEND_URL") or "http://localhost:10000"
     url = f"{backend_url}/users/{user_id}"
     headers = None
     if token:

@@ -11,7 +11,7 @@ import json
 def post_login(email: str,
                password: str) -> dict:
     import os
-    backend_url = os.getenv("BACKEND_URL") or "http://localhost:3000"
+    backend_url = os.getenv("BACKEND_URL") or "http://localhost:10000"
     url = f"{backend_url}/login"
     try:
         response = requests.request("POST",
