@@ -12,7 +12,7 @@ def post_login(email: str,
                password: str) -> dict:
     import os
     backend_url = os.getenv("BACKEND_URL") or "http://localhost:10000"
-    url = f"{backend_url}/login"
+    url = f"{backend_url}/rest/login"
     try:
         response = requests.request("POST",
                                     url,
