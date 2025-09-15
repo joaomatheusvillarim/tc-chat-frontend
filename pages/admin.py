@@ -4,9 +4,10 @@ suas conversas.
 """
 import emoji
 
-import api.user_requests as user_requests
 import streamlit as st
-
+import api.user_requests as user_requests
+import api.chat_requests as chat_requests
+import util.message_formatting as message_formatting
 
 # -----set-up inicial-----
 
@@ -33,15 +34,19 @@ if "active_user_id" not in st.session_state:
     st.session_state.active_user_id = None
 if "active_user" not in st.session_state:
     st.session_state.active_user = None
+if "active_user_chats" not in st.session_state:
+    st.session_state.active_user_chats = None
 
 
 # -----funções utilizadas neste módulo-----
 
 
-def select_user(user_id):
+def select_user(user_id: int):
     st.session_state.active_user_id = user_id
     st.session_state.active_user = user_requests.get_user(user_id,
                                                           token=st.session_state.token)["result"]
+    st.session_state.active_user_chats = chat_requests.get_all_chats(user_id,
+                                                                     token=st.session_state.token)["result"]
 
 
 def create_data_payload(name: str,
@@ -96,6 +101,9 @@ with st.sidebar:
 
 
 # -----conteúdo principal da página-----
+
+
+st.title(emoji.emojize("Administração :hammer_and_wrench:"))
 
 if st.session_state.active_user_id is None:
     select_user(st.session_state.user.get("id"))
@@ -172,3 +180,15 @@ with st.form("change_password_form",
             else:
                 st.warning("Erro ao alterar a senha.",
                            icon=emoji.emojize(":warning:"))
+
+st.markdown("---")
+st.markdown("### Chats do usuário")
+with st.container():
+    if st.session_state.active_user_chats == []:
+        st.markdown("O usuário ainda não criou nenhum chat.")
+    for chat in st.session_state.active_user_chats:
+        with st.expander(chat["title"]):
+            messages = message_formatting.format_messages(chat["messages"])
+            for message in messages:
+                with st.chat_message(message["role"]):
+                    st.markdown(message_formatting.format_message(message["content"]))
