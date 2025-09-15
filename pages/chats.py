@@ -5,6 +5,7 @@ import sys
 import emoji
 
 import api.chat_requests as chat_requests
+import util.message_formatting as message_formatting
 import streamlit as st
 
 # -----set-up inicial-----
@@ -48,7 +49,7 @@ def select_chat(chat_id):
                                       chat_id=chat_id,
                                       token=st.session_state.token
                                       )["result"]
-        st.session_state.active_chat_messages = chat_requests.format_messages(
+        st.session_state.active_chat_messages = message_formatting.format_messages(
             chat["messages"]
         )
 
@@ -139,7 +140,7 @@ st.title(emoji.emojize("TC-chat :books::robot:"))
 # exibe as mensagens do chat atual
 for message in st.session_state.get('active_chat_messages', []):
     with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+        st.markdown(message_formatting.format_message(message["content"]))
 
 # envio de novas mensagens no chat atual
 if prompt := st.chat_input("Digite sua mensagem aqui..."):
@@ -175,9 +176,9 @@ if prompt := st.chat_input("Digite sua mensagem aqui..."):
 
         if chat:
             st.session_state.active_chat_id = chat['id']
-            st.session_state.active_chat_messages = chat_requests.format_messages(
+            st.session_state.active_chat_messages = message_formatting.format_messages(
                 chat['messages']
-            )["result"]
+            )
             if is_new_chat:
                 st.session_state.chat_history = None
 

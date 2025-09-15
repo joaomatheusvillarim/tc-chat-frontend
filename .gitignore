@@ -2,3 +2,4 @@
 .venv
 pages/__pycache__
 api/__pycache__
+util/__pycache__

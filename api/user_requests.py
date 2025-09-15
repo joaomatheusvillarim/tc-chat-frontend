@@ -57,6 +57,22 @@ def post_user(name: str,
     )
 
 
+def get_all_users(token: str):
+    return base_user_request(
+        "GET",
+        token=token
+    )
+
+
+def get_user(user_id: int,
+             token: str):
+    return base_user_request(
+        "GET",
+        token=token,
+        user_id=user_id
+    )
+
+
 def put_user(user_id: int,
              password: str,
              token: str):
