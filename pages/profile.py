@@ -2,7 +2,6 @@
 Módulo de visualização das informações do perfil e alteração de senha de
 usuário "aluno".
 """
-import sys
 import emoji
 
 import api.user_requests as user_requests
@@ -10,7 +9,6 @@ import streamlit as st
 
 # -----set-up inicial-----
 
-sys.path.append('..')
 st.set_page_config(
     page_title="Perfil - TC-chat",
     page_icon=emoji.emojize(":bust_in_silhouette:")
@@ -22,15 +20,10 @@ st.markdown(
 st.markdown(
     '<style>[data-testid="stToolbar"] { display: none; }</style>', unsafe_allow_html=True)
 
-st.set_page_config(
-    layout="centered",
-    page_title="Meu Perfil",
-    page_icon=emoji.emojize(":bust_in_silhouette:")
-)
-
 # impede o acesso de um usuário não autenticado
 if not st.session_state.get("is_authenticated", False):
-    st.error("Acesso negado. Por favor, faça o login primeiro.")
+    st.error("Acesso negado. Por favor, faça o login primeiro.",
+             icon=emoji.emojize(":warning:"))
     st.switch_page("app.py")
     st.stop()
 
@@ -63,9 +56,9 @@ st.subheader("Alterar Senha")
 
 with st.form("change_password_form",
              clear_on_submit=True):
-    new_password = st.text_input("Nova Senha",
+    new_password = st.text_input("Nova senha",
                                  type="password")
-    confirm_password = st.text_input("Confirme a Nova Senha",
+    confirm_password = st.text_input("Confirme a nova senha",
                                      type="password")
 
     submitted = st.form_submit_button("Alterar Senha",
@@ -82,7 +75,9 @@ with st.form("change_password_form",
             with st.spinner("Processando..."):
                 success = user_requests.put_user(
                     user_id=st.session_state.user["id"],
-                    password=new_password,
+                    data={
+                        "password": new_password
+                    },
                     token=st.session_state.token
                 )["success"]
 

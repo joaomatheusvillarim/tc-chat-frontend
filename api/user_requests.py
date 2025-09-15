@@ -74,13 +74,11 @@ def get_user(user_id: int,
 
 
 def put_user(user_id: int,
-             password: str,
+             data: dict,
              token: str):
     return base_user_request(
         "PUT",
         user_id=user_id,
         token=token,
-        data={
-            "password": password
-        }
+        data=data
     )

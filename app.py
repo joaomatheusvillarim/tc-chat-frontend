@@ -7,9 +7,10 @@ import emoji
 
 import streamlit as st
 import api.login_requests as login_requests
-import api.backend_request as backend_request
+
 
 # -----set-up inicial-----
+
 
 st.set_page_config(
     page_title="Login - TC-chat",
@@ -21,6 +22,8 @@ st.markdown(
     '<style>[data-testid="stSidebar"] { display: none; }</style>', unsafe_allow_html=True)
 st.markdown(
     '<style>[data-testid="stToolbar"] { display: none; }</style>', unsafe_allow_html=True)
+
+
 # -----funções utilizadas neste módulo-----
 
 
@@ -51,21 +54,15 @@ def handle_login(email: str, password: str):
                      icon=emoji.emojize(":warning:"))
             
 
-def wake_backend():
-    with st.spinner("Conectando ao serviço de back-end..."):
-        backend_request.get_backend()
-
 # -----conteúdo principal da página-----
 
-initialize_session_state()
 
+initialize_session_state()
 
 if st.session_state.is_authenticated:
     st.switch_page("pages/chats.py")
 
 st.title("Faça login no TC-chat")
-
-wake_backend()
 
 with st.form("login_form"):
     email = st.text_input("Email",

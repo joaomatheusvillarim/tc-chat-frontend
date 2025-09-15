@@ -1,16 +1,16 @@
 """
 Módulo de chats para conversas entre o usuário e a LLM.
 """
-import sys
 import emoji
 
 import api.chat_requests as chat_requests
 import util.message_formatting as message_formatting
 import streamlit as st
 
+
 # -----set-up inicial-----
 
-sys.path.append('..')
+
 st.set_page_config(
     page_title="Chats - TC-chat",
     page_icon=emoji.emojize(":speech_balloon:")
@@ -27,10 +27,10 @@ st.session_state.chat_history = None
 # impede acesso de usuário não autenticado
 if not st.session_state.get("is_authenticated", False):
     st.error("Acesso negado. Por favor, faça o login primeiro.",
-             icon=emoji.emojize(":warning:")
-             )
+             icon=emoji.emojize(":warning:"))
     st.switch_page("app.py")
     st.stop()
+
 
 # -----funções utilizadas neste módulo-----
 
@@ -82,7 +82,8 @@ def logout():
     st.session_state.chat_history = None
     st.switch_page("app.py")
 
-# -----sidebar-----
+
+# -----sidebar de chats-----
 
 
 with st.sidebar:
@@ -111,7 +112,7 @@ with st.sidebar:
     for chat in st.session_state.chat_history:
         button_type = "primary" if chat['id'] == st.session_state.active_chat_id else "secondary"
         st.button(
-            chat['title'],
+            label=chat['title'],
             key=f"chat_{chat['id']}",
             on_click=select_chat,
             args=(chat['id'],),
@@ -133,7 +134,15 @@ with st.sidebar:
                  on_click=logout):
         pass
 
+    if st.session_state.user["isAdmin"]:
+        if st.button("Administração",
+                     use_container_width=True,
+                     type="secondary"):
+            st.switch_page("pages/admin.py")
+
+
 # -----conteúdo principal da página-----
+
 
 st.title(emoji.emojize("TC-chat :books::robot:"))
 
