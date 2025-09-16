@@ -7,6 +7,7 @@ import emoji
 import streamlit as st
 import api.user_requests as user_requests
 import api.chat_requests as chat_requests
+import api.admin_requests as admin_requests
 import util.message_formatting as message_formatting
 
 # -----set-up inicial-----
@@ -73,6 +74,7 @@ def create_data_payload(name: str,
 
 with st.sidebar:
     st.header("Administração")
+    st.markdown("---")
     st.subheader("Usuários")
 
     if st.session_state.get("user_list") is None:
@@ -107,6 +109,8 @@ st.title(emoji.emojize("Administração :hammer_and_wrench:"))
 
 if st.session_state.active_user_id is None:
     select_user(st.session_state.user.get("id"))
+
+st.markdown("### Informações do usuário")
 
 with st.form("update_user_form",
              clear_on_submit=True):
@@ -191,4 +195,48 @@ with st.container():
             messages = message_formatting.format_messages(chat["messages"])
             for message in messages:
                 with st.chat_message(message["role"]):
-                    st.markdown(message_formatting.format_message(message["content"]))
+                    st.markdown(message_formatting.format_message(
+                        message["content"]))
+
+st.markdown("---")
+st.markdown("### Todos os usuários")
+
+with st.form("change_daily_quota_reset_value_form",
+             clear_on_submit=True):
+    reset_value = st.text_input("Novo valor de quota diária")
+    submitted = st.form_submit_button("Alterar valor")
+    if submitted:
+        response = admin_requests.change_daily_quota_reset_value(reset_value,
+                                                                 st.session_state.token)
+        if response["success"]:
+            st.success("Valor da quota diária alterado com sucesso",
+                       icon=emoji.emojize(":check_mark_button:"))
+        else:
+            st.warning("Erro ao alterar o valor da quota diária.",
+                       icon=emoji.emojize(":right_arrow_curving_left:"))
+
+if st.button("Executar reset da quota diária agora",
+             use_container_width=True):
+    response = admin_requests.run_daily_quota_reset(st.session_state.token)
+    if response["success"]:
+        st.success("Reset de quota diária executado com sucesso",
+                   icon=emoji.emojize(":check_mark_button:"))
+    else:
+        st.warning("Erro ao executar o reset de quota diária.",
+                   icon=emoji.emojize(":right_arrow_curving_left:"))
+
+with st.form("change_all_users_authorization"):
+    is_authorized = st.text_input("Autorizações de todos os membros",
+                                  value="False")
+    submitted = st.form_submit_button("Alterar autorização")
+
+    if submitted:
+        is_authorized = True if is_authorized == "True" else False
+        response = admin_requests.change_all_users_authorization(is_authorized,
+                                                                 st.session_state.token)
+        if response["success"]:
+            st.success("Autorizações de todos os usuários alteradas com sucesso",
+                       icon=emoji.emojize(":check_mark_button:"))
+        else:
+            st.warning("Erro ao alterar as autorizações de todos os usuários.",
+                       icon=emoji.emojize(":right_arrow_curving_left:"))
